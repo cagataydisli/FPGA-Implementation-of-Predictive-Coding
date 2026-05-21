@@ -1,0 +1,21 @@
+# 48 MHz clock constraint for the board-level wrapper.
+NET "clk_48" TNM_NET = "clk_48";
+TIMESPEC "TS_clk_48" = PERIOD "clk_48" 20.833 ns HIGH 50%;
+
+# Fill these LOC values from the Virtex-6 board schematic or from the old
+# working mainpy2verilog project UCF before generating the bitstream.
+#
+# NET "clk_48"       LOC = "<clock_pin>" | IOSTANDARD = LVCMOS33;
+# NET "reset"        LOC = "<reset_pin>" | IOSTANDARD = LVCMOS33;
+# NET "stim_in"      LOC = "<stimulus_pin>" | IOSTANDARD = LVCMOS33;
+# NET "ce_20k"       LOC = "<debug_pin>" | IOSTANDARD = LVCMOS33;
+# NET "pe_spike<0>"  LOC = "<pin>" | IOSTANDARD = LVCMOS33;
+# NET "pe_spike<1>"  LOC = "<pin>" | IOSTANDARD = LVCMOS33;
+# NET "pe_spike<2>"  LOC = "<pin>" | IOSTANDARD = LVCMOS33;
+# NET "pe_spike<3>"  LOC = "<pin>" | IOSTANDARD = LVCMOS33;
+# NET "pe_spike<4>"  LOC = "<pin>" | IOSTANDARD = LVCMOS33;
+# NET "pe_spike<5>"  LOC = "<pin>" | IOSTANDARD = LVCMOS33;
+# NET "pe_spike<6>"  LOC = "<pin>" | IOSTANDARD = LVCMOS33;
+# NET "pe_spike<7>"  LOC = "<pin>" | IOSTANDARD = LVCMOS33;
+# NET "pe_spike<8>"  LOC = "<pin>" | IOSTANDARD = LVCMOS33;
+# NET "pe_spike<9>"  LOC = "<pin>" | IOSTANDARD = LVCMOS33;

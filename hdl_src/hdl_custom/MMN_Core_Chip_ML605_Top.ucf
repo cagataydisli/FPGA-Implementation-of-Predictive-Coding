@@ -1,0 +1,34 @@
+# ML605 board constraints for MMN_Core_Chip_ML605_Top.
+#
+# Source: AMD/Xilinx ML605 Hardware User Guide UG534.
+# SYSCLK_P/N is the onboard 200 MHz LVDS oscillator.
+
+NET "sysclk_p" LOC = "J9" | IOSTANDARD = LVDS_25;
+NET "sysclk_n" LOC = "H9" | IOSTANDARD = LVDS_25;
+NET "sysclk_p" TNM_NET = "sysclk_p";
+TIMESPEC "TS_sysclk_200" = PERIOD "sysclk_p" 5 ns HIGH 50%;
+
+# CPU_RESET pushbutton, active-high into this design.
+NET "reset" LOC = "H10" | IOSTANDARD = LVCMOS15;
+
+# User LEDs DS12, DS11, DS9, DS10, DS15, DS14, DS22, DS21.
+NET "pe_led<0>" LOC = "AC22" | IOSTANDARD = LVCMOS15;
+NET "pe_led<1>" LOC = "AC24" | IOSTANDARD = LVCMOS15;
+NET "pe_led<2>" LOC = "AE22" | IOSTANDARD = LVCMOS15;
+NET "pe_led<3>" LOC = "AE23" | IOSTANDARD = LVCMOS15;
+NET "pe_led<4>" LOC = "AB23" | IOSTANDARD = LVCMOS15;
+NET "pe_led<5>" LOC = "AG23" | IOSTANDARD = LVCMOS15;
+NET "pe_led<6>" LOC = "AE24" | IOSTANDARD = LVCMOS15;
+NET "pe_led<7>" LOC = "AD24" | IOSTANDARD = LVCMOS15;
+
+# Directional LEDs used for the remaining two PE indicators and debug.
+NET "pe_led<8>" LOC = "AH27" | IOSTANDARD = LVCMOS15;
+NET "pe_led<9>" LOC = "AH28" | IOSTANDARD = LVCMOS15;
+NET "ce_20k" LOC = "AP24" | IOSTANDARD = LVCMOS15;
+NET "pll_locked" LOC = "AD21" | IOSTANDARD = LVCMOS15;
+NET "stim_led" LOC = "AE21" | IOSTANDARD = LVCMOS15;
+
+# Constrain the PLL-generated 48 MHz net after implementation discovers it.
+# If ISE says this net name is not found, keep the 200 MHz input constraint and
+# rely on generated-clock tracing, or add a TIMESPEC from the timing report's
+# actual clk48 net name.

@@ -1,0 +1,48 @@
+# ML605 board constraints for MMN_Core_Chip_ML605_Top candidate1.
+#
+# This file is the same pinout as MMN_Core_Chip_ML605_Top.ucf, with one
+# additional timing exception for the MMN core. The wrapper clock is 48 MHz, but
+# the Simulink-generated core state is clock-enabled at 20 kHz (ce_tick once per
+# 2400 clk48 cycles). Therefore core-to-core registered paths are allowed one
+# 20 kHz sample period instead of one 48 MHz cycle.
+
+NET "sysclk_p" LOC = "J9" | IOSTANDARD = LVDS_25;
+NET "sysclk_n" LOC = "H9" | IOSTANDARD = LVDS_25;
+NET "sysclk_p" TNM_NET = "sysclk_p";
+TIMESPEC "TS_sysclk_200" = PERIOD "sysclk_p" 5 ns HIGH 50%;
+
+# CPU_RESET pushbutton, active-high into this design.
+NET "reset" LOC = "H10" | IOSTANDARD = LVCMOS15;
+
+# User LEDs DS12, DS11, DS9, DS10, DS15, DS14, DS22, DS21.
+NET "pe_led<0>" LOC = "AC22" | IOSTANDARD = LVCMOS15;
+NET "pe_led<1>" LOC = "AC24" | IOSTANDARD = LVCMOS15;
+NET "pe_led<2>" LOC = "AE22" | IOSTANDARD = LVCMOS15;
+NET "pe_led<3>" LOC = "AE23" | IOSTANDARD = LVCMOS15;
+NET "pe_led<4>" LOC = "AB23" | IOSTANDARD = LVCMOS15;
+NET "pe_led<5>" LOC = "AG23" | IOSTANDARD = LVCMOS15;
+NET "pe_led<6>" LOC = "AE24" | IOSTANDARD = LVCMOS15;
+NET "pe_led<7>" LOC = "AD24" | IOSTANDARD = LVCMOS15;
+
+# Directional LEDs used for the remaining two PE indicators and debug.
+NET "pe_led<8>" LOC = "AH27" | IOSTANDARD = LVCMOS15;
+NET "pe_led<9>" LOC = "AH28" | IOSTANDARD = LVCMOS15;
+NET "ce_20k" LOC = "AP24" | IOSTANDARD = LVCMOS15;
+NET "pll_locked" LOC = "AD21" | IOSTANDARD = LVCMOS15;
+NET "stim_led" LOC = "AE21" | IOSTANDARD = LVCMOS15;
+
+# USB-UART bridge J21. FPGA TX drives CP2103 RX through package pin J25.
+NET "uart_tx" LOC = "J25" | IOSTANDARD = LVCMOS15;
+
+# Multicycle timing exception:
+# clk48 = 48 MHz -> 20.833 ns. ce_tick = clk48 / 2400 -> 50 us.
+# Keep wrapper logic and the custom STDP FSM constrained at 48 MHz. Relax only
+# Simulink state blocks whose registers are updated through clk_enable/enb.
+INST "u_core/u_Thalamus_A/*" TNM = FFS "core_ce20k_ff";
+INST "u_core/u_Mem_A/*" TNM = FFS "core_ce20k_ff";
+INST "u_core/u_Enabled_Subsystem/*" TNM = FFS "core_ce20k_ff";
+INST "u_core/u_P_A/*" TNM = FFS "core_ce20k_ff";
+INST "u_core/u_I_A/*" TNM = FFS "core_ce20k_ff";
+INST "u_core/u_PE_A/*" TNM = FFS "core_ce20k_ff";
+INST "u_core/Unit_Delay_out1*" TNM = FFS "core_ce20k_ff";
+TIMESPEC "TS_core_ce20k_mc" = FROM "core_ce20k_ff" TO "core_ce20k_ff" 50000 ns;
